@@ -17,4 +17,5 @@ main() {
 
     main::_init_command $@
     main::_init_modules $@
+    main::_init_options $@
 }; main $@

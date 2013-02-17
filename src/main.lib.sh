@@ -137,3 +137,14 @@ main::_init_options_by_args() {
         eval "$(echo ${MODULES[0]} | tr '[a-z]' '[A-Z]')_OPTS[$opt]=${options[$opt]}"
     done
 }
+
+main::_init_options() {
+    if [[ "$@" =~ "--conf" ]]; then
+        main::_init_options_by_conf $@
+        return 0
+    fi
+
+    if [ 1 -eq "${#MODULES[@]}" ]; then
+        main::_init_options_by_args $@
+    fi
+}
