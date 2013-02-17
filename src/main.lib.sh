@@ -76,3 +76,25 @@ main::_init_modules() {
 
     main::_trim_modules
 }
+
+main::_init_options_by_conf() {
+    local temp=`getopt -o : --long conf: -- "$@"`
+
+    eval set -- "$temp"
+
+    while true ; do
+        case "$1" in
+            --conf )
+                local conf_path="$2"
+                shift 2
+                ;;
+            -- ) shift; break;;
+        esac
+    done
+
+    if [ -z "$conf_path" ]; then
+        throw
+    else
+        require "$conf_path"
+    fi
+}
