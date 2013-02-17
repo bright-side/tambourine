@@ -25,3 +25,16 @@ main::_check_uid() {
         throw
     fi
 }
+
+main::_init_command() {
+    for arg; do
+        if [[ "${STANDARD_COMMANDS[@]}" =~ "$arg" ]]; then
+            COMMAND="$arg"
+            break
+        fi
+    done
+
+    if [ -z "$COMMAND" ]; then
+        throw
+    fi
+}

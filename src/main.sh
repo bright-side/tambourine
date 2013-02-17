@@ -14,4 +14,6 @@ main() {
 
     main::_build
     main::_check_uid
+
+    main::_init_command $@
 }; main $@
