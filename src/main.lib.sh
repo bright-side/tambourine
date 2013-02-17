@@ -19,3 +19,9 @@ main::_build() {
         core::module::check_completeness "$module"
     done
 }
+
+main::_check_uid() {
+    if [ 0 -ne $UID ]; then
+        throw
+    fi
+}

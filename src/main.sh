@@ -13,4 +13,5 @@ main() {
     . "$lib_path"
 
     main::_build
+    main::_check_uid
 }; main $@
