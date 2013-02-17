@@ -38,3 +38,41 @@ main::_init_command() {
         throw
     fi
 }
+
+main::_trim_modules() {
+    local i=0
+    local max=0
+
+    while [ $i -lt "${#MODULES[@]}" ]; do
+        local j=0
+
+        while [ $j -lt "${#MODULES[@]}" ]; do
+            if [ $i -ne $j ] && [[ "${MODULES[$i]}" == "${MODULES[$j]}" ]]; then
+                (( max = i > j ? i : j ))
+
+                MODULES=( "${MODULES[@]:0:$max}" "${MODULES[@]:($max+1)}" )
+
+                i=-1
+                break
+            fi
+
+            j=$((j+1))
+        done
+
+        i=$((i+1))
+    done
+}
+
+main::_init_modules() {
+    for arg; do
+        if [[ "${STANDARD_MODULES[@]}" =~ "$arg" ]]; then
+            MODULES[${#MODULES[@]}]=$arg
+        fi
+    done
+
+    if [ -z "$MODULES" ]; then
+        throw
+    fi
+
+    main::_trim_modules
+}

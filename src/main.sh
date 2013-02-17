@@ -16,4 +16,5 @@ main() {
     main::_check_uid
 
     main::_init_command $@
+    main::_init_modules $@
 }; main $@
