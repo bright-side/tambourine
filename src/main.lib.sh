@@ -98,3 +98,42 @@ main::_init_options_by_conf() {
         require "$conf_path"
     fi
 }
+
+main::_init_options_by_args() {
+    declare -a options
+    core::module::require_opts "${MODULES[0]}"
+
+    local args=`getopt -o "$SHORT_OPTS" --long "$LONG_OPTS" -- "$@"`
+    eval set -- "$args"
+
+    while true; do
+        if [[ -- = "$1" ]]; then
+            shift
+            break
+        fi
+
+        if [ 2 -eq ${#1} ]; then
+            local opts="$SHORT_OPTS"
+            local opt="${1:1}"
+
+        else
+            local opts="$LONG_OPTS"
+            local opt="${1:2}"
+        fi
+
+        local pos=`awk -v a="$opts" -v b="$opt" 'BEGIN{print index(a,b)}'`
+        pos=$(($pos+${#opt}-1))
+
+        if [[ : == "${opts:$pos:1}" ]]; then
+            options["$opt"]="$2"
+            shift 2
+        else
+            options["$opt"]="true"
+            shift
+        fi
+    done
+
+    for opt in "${!options[@]}"; do
+        eval "$(echo ${MODULES[0]} | tr '[a-z]' '[A-Z]')_OPTS[$opt]=${options[$opt]}"
+    done
+}
