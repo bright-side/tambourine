@@ -18,4 +18,8 @@ main() {
     main::_init_command $@
     main::_init_modules $@
     main::_init_options $@
+
+    if [[ "install" == "$COMMAND" ]]; then
+        main::_extend_modules_by_deps
+    fi
 }; main $@
