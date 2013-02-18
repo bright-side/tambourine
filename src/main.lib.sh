@@ -148,3 +148,46 @@ main::_init_options() {
         main::_init_options_by_args $@
     fi
 }
+
+main::_extend_modules_by_deps() {
+    local exit_code=0;
+
+    local i=0
+    while [ $i -lt ${#MODULES[@]} ]; do
+        core::module::require_deps "${MODULES[$i]}"
+
+        for dep_module in "${DEPS[@]}"; do
+            if [[ $dep_module == "${MODULES[$i]}" ]]; then
+                exit_code=2
+                continue
+            fi
+
+            local buffer=( "${DEPS[@]}" )
+            core::module::require_deps "$dep_module"
+            if [[ "${DEPS[@]}" =~ "${MODULES[$i]}" ]]; then
+                throw
+            fi
+            DEPS=( "${buffer[@]}" )
+
+            local j=$i
+            while [[ $j -lt ${#MODULES[@]} ]]; do
+                if [[ $dep_module == ${MODULES[$j]} ]]; then
+                    MODULES=( ${MODULES[@]:0:$j} ${MODULES[@]:($j+1)} )
+                fi
+
+                j=$((j+1))
+            done
+
+            if [[ ! "${MODULES[@]:$i-1}" =~ "$dep_module" ]]; then
+                MODULES=( "${MODULES[@]:0:$i}" "$dep_module" "${MODULES[@]:$i}" )
+
+                i=-1
+                break
+            fi
+        done
+
+        i=$((i+1))
+    done
+
+    return $exit_code
+}
