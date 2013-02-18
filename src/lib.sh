@@ -37,3 +37,17 @@ require() {
     check_file $@
     . "$1"
 }
+
+function confirm() {
+    check_num_args 1 $# $FUNCNAME
+
+    read -p "$1 (Y/[n])? " -r
+    [[ $REPLY =~ ^[Yy][Ee]?[Ss]?$ ]] || {
+        if [ ! -z "$2" ]; then
+            echo "$2"
+        fi
+
+        exit 0
+        echo 1>&2
+    }
+}
