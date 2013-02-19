@@ -14,3 +14,45 @@ core::module::check_completeness() {
         check_file "$module_dir/$command.$SHELL_EXTENSION"
     done
 }
+
+core::module::_require_file() {
+    check_num_args 2 $# $FUNCNAME
+
+    local path="$MODULES_PATH/$1/$2"
+
+    case "$2" in
+        "$DEPS_FILE" )
+            local filetype="dependencies"
+            ;;
+        "$PACKS_FILE" )
+            local filetype="packages"
+            ;;
+        "$OPTS_FILE" )
+            local filetype="options"
+            ;;
+        esac
+
+    require "$path"
+
+    if [ -z $filetype ]; then
+        return 2
+    fi
+}
+
+core::module::require_deps() {
+    check_num_args 1 $# $FUNCNAME
+
+    core::module::_require_file "$1" "$DEPS_FILE"
+}
+
+core::module::require_packs() {
+    check_num_args 1 $# $FUNCNAME
+
+    core::module::_require_file "$1" "$PACKS_FILE"
+}
+
+core::module::require_opts() {
+    check_num_args 1 $# $FUNCNAME
+
+    core::module::_require_file "$1" "$OPTS_FILE"
+}
