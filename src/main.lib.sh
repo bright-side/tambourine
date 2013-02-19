@@ -191,3 +191,16 @@ main::_extend_modules_by_deps() {
 
     return $exit_code
 }
+
+main::_exclude_installed_modules() {
+    local i=0
+
+    while [ $i -lt "${#MODULES[@]}" ]; do
+        if [[ "INSTALLED" == "${MODULES_STATE[${MODULES[$i]}]}" ]]; then
+            MODULES=( "${MODULES[@]:0:$i}" "${MODULES[@]:($i+1)}" )
+            i=$((i-1))
+        fi
+
+        i=$((i+1))
+    done
+}

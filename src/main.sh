@@ -25,6 +25,8 @@ main() {
         for module in "${MODULES[@]}"; do
             core::module::check "$module"
         done
+
+        main::_exclude_installed_modules
     fi
 
     for module in "${MODULES[@]}"; do
