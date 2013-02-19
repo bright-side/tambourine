@@ -21,6 +21,10 @@ main() {
 
     if [[ "install" == "$COMMAND" ]]; then
         main::_extend_modules_by_deps
+
+        for module in "${MODULES[@]}"; do
+            core::module::check "$module"
+        done
     fi
 
     for module in "${MODULES[@]}"; do
