@@ -39,6 +39,17 @@ core::module::_require_file() {
     fi
 }
 
+core::module::_execute() {
+    check_num_args 2 $# $FUNCNAME
+
+    require "$MODULES_PATH/$1/$2.$SHELL_EXTENSION"
+
+    if [[ ! "${STANDARD_COMMANDS[@]}" =~ "$2" ]]; then
+        echo "Warning!"
+        return 2
+    fi
+}
+
 core::module::require_deps() {
     check_num_args 1 $# $FUNCNAME
 
@@ -55,4 +66,22 @@ core::module::require_opts() {
     check_num_args 1 $# $FUNCNAME
 
     core::module::_require_file "$1" "$OPTS_FILE"
+}
+
+core::module::install() {
+    check_num_args 1 $# $FUNCNAME
+
+    core::module::_execute "$1" "install"
+}
+
+core::module::uninstall() {
+    check_num_args 1 $# $FUNCNAME
+
+    core::module::_execute "$1" "remove"
+}
+
+core::module::check() {
+    check_num_args 1 $# $FUNCNAME
+
+    core::module::_execute "$1" "check"
 }
