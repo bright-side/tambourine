@@ -6,6 +6,7 @@ main::_build() {
     local lib_path="$PWD/lib.$SHELL_EXTENSION"
 
     if [ ! -f "$lib_path" ]; then
+        echo "Internal error: the file \"$lib_path\" does not exist!"
         exit 1
     fi
     . "$lib_path"
@@ -22,7 +23,7 @@ main::_build() {
 
 main::_check_uid() {
     if [ 0 -ne $UID ]; then
-        throw
+        throw "You must be root to make the Tambourine obey you!"
     fi
 }
 
@@ -35,7 +36,7 @@ main::_init_command() {
     done
 
     if [ -z "$COMMAND" ]; then
-        throw
+        throw "You didn't specify a command for modules or this command is unknown to the Tambourine!"
     fi
 }
 
@@ -71,7 +72,7 @@ main::_init_modules() {
     done
 
     if [ -z "$MODULES" ]; then
-        throw
+        throw "You didn't specify modules to be $COMMANDed or these modules are unknown to the Tambourine!"
     fi
 
     main::_trim_modules
@@ -93,9 +94,9 @@ main::_init_options_by_conf() {
     done
 
     if [ -z "$conf_path" ]; then
-        throw
+        throw "You didn't specify a path to config file!"
     else
-        require "$conf_path"
+        require "$conf_path" "The specified config file \"$conf_path\" does not exist!"
     fi
 }
 
@@ -165,7 +166,7 @@ main::_extend_modules_by_deps() {
             local buffer=( "${DEPS[@]}" )
             core::module::require_deps "$dep_module"
             if [[ "${DEPS[@]}" =~ "${MODULES[$i]}" ]]; then
-                throw
+                throw "Error: invalid dependency — modules (\"${MODULES[$i]}\", \"$dep_module\") are pointed at each other!"
             fi
             DEPS=( "${buffer[@]}" )
 
