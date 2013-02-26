@@ -4,14 +4,14 @@ core::module::check_completeness() {
     check_num_args 1 $# $FUNCNAME
 
     local module_dir="$MODULES_PATH/$1"
-    check_dir "$module_dir"
+    check_dir "$module_dir" "Error: the module \"$1\" does not exist!"
 
-    check_file "$module_dir/$DEPS_FILE"
-    check_file "$module_dir/$PACKS_FILE"
-    check_file "$module_dir/$OPTS_FILE"
+    check_file "$module_dir/$DEPS_FILE" "Error: the dependencies file of the module \"$1\" does not exist!"
+    check_file "$module_dir/$PACKS_FILE" "Error: the packages file of the module \"$1\" does not exist!"
+    check_file "$module_dir/$OPTS_FILE" "Error: the options file of the module \"$1\" does not exist!"
 
     for command in "${STANDARD_COMMANDS[@]}"; do
-        check_file "$module_dir/$command.$SHELL_EXTENSION"
+        check_file "$module_dir/$command.$SHELL_EXTENSION" "Error: the $command file of the module \"$1\" does not exist!"
     done
 }
 
@@ -32,7 +32,7 @@ core::module::_require_file() {
             ;;
         esac
 
-    require "$path"
+    require "$path" "Error: the $filetype file of the module \"$1\" does not exist!"
 
     if [ -z $filetype ]; then
         return 2
@@ -42,7 +42,7 @@ core::module::_require_file() {
 core::module::_execute() {
     check_num_args 2 $# $FUNCNAME
 
-    require "$MODULES_PATH/$1/$2.$SHELL_EXTENSION"
+    require "$MODULES_PATH/$1/$2.$SHELL_EXTENSION" "Error: the $2 file of the module \"$1\" does not exist!"
 
     if [[ ! "${STANDARD_COMMANDS[@]}" =~ "$2" ]]; then
         echo "Warning!"

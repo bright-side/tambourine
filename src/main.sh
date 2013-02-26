@@ -8,6 +8,7 @@ main() {
     local lib_path="$PWD/main.lib.$SHELL_EXTENSION"
 
     if [ ! -f "$lib_path" ]; then
+        echo "Internal error: the file \"$lib_path\" does not exist!"
         exit 1
     fi
     . "$lib_path"
