@@ -159,6 +159,7 @@ main::_extend_modules_by_deps() {
 
         for dep_module in "${DEPS[@]}"; do
             if [[ $dep_module == "${MODULES[$i]}" ]]; then
+                echo "Warning: invalid dependency — module \"$dep_module\" is pointed at itself!"
                 exit_code=2
                 continue
             fi

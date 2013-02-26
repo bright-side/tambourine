@@ -35,6 +35,7 @@ core::module::_require_file() {
     require "$path" "Error: the $filetype file of the module \"$1\" does not exist!"
 
     if [ -z $filetype ]; then
+        echo "Warning: type of the required file \"$path\" of the module \"$1\" is not standard!"
         return 2
     fi
 }
@@ -45,7 +46,7 @@ core::module::_execute() {
     require "$MODULES_PATH/$1/$2.$SHELL_EXTENSION" "Error: the $2 file of the module \"$1\" does not exist!"
 
     if [[ ! "${STANDARD_COMMANDS[@]}" =~ "$2" ]]; then
-        echo "Warning!"
+        echo "Warning: the command \"$2\" of the module \"$1\" is not standard!"
         return 2
     fi
 }
