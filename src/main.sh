@@ -36,6 +36,8 @@ main() {
 
     if [[ "uninstall" == "$COMMAND" ]]; then
         echo "Preparing to uninstall modules..."
+
+        main::_report_can_break_modules
     fi
 
     for module in "${MODULES[@]}"; do

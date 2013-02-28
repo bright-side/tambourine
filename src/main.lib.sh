@@ -226,3 +226,50 @@ main::_report_modules_need_install() {
         confirm "Continue installation" "Stopping installation..."
     fi
 }
+
+main::_report_can_break_modules() {
+    declare -a modules_can_break
+
+    for standard_module in "${STANDARD_MODULES[@]}"; do
+        core::module::check "$standard_module"
+
+        if [ 0 -eq $? ]; then
+            core::module::require_deps "$standard_module"
+
+            for module in "${MODULES[@]}"; do
+                if [[ "${DEPS[@]}" =~ "$module" ]]; then
+                    modules_can_break=( "${modules_can_break[@]}" "$standard_module" )
+
+                    local i=0
+                    while [ $i -lt "${#STANDARD_MODULES[@]}" ]; do
+                        core::module::check "${STANDARD_MODULES[$i]}"
+
+                        if [ 0 -eq $? ]; then
+                            core::module::require_deps "${STANDARD_MODULES[$i]}"
+
+                            if [[ "${STANDARD_MODULES[$i]}" != "$standard_module" ]] && [[ "${DEPS[@]}" =~ "$standard_module" ]]; then
+                                modules_can_break=( "${modules_can_break[@]}" "${STANDARD_MODULES[$i]}" )
+
+                                standard_module="${STANDARD_MODULES[$i]}"
+                                i=-1
+                                continue
+                            fi
+                        fi
+
+                        i=$((i+1))
+                    done
+                fi
+            done
+        fi
+    done
+
+    if [ "${#modules_can_break[@]}" -gt 0 ]; then
+        echo "Uninstalling specified modules may cause troubles in:"
+
+        for module in "${modules_can_break[@]}"; do
+            echo " * $module"
+        done
+
+        confirm "Confirm uninstall" "Stopping uninstallation..."
+    fi
+}
