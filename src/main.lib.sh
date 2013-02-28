@@ -206,3 +206,23 @@ main::_exclude_installed_modules() {
         i=$((i+1))
     done
 }
+
+main::_report_modules_need_install() {
+    declare -a need_install_modules
+
+    for module in "${MODULES[@]}"; do
+        if [[ ! "${INITED_MODULES[@]}" =~ "$module" ]] && [[ "NOT_INSTALLED" == "${MODULES_STATE[$module]}" ]]; then
+            need_install_modules=( "${need_install_modules[@]}" "$module" )
+        fi
+    done
+
+    if [ "${#need_install_modules[@]}" -gt 0 ]; then
+        echo "In order to make the specified modules run correctly you need to install:"
+
+        for module in "${need_install_modules[@]}"; do
+            echo " * $module"
+        done
+
+        confirm "Continue installation" "Stopping installation..."
+    fi
+}

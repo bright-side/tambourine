@@ -30,6 +30,8 @@ main() {
         done
 
         main::_exclude_installed_modules
+
+        main::_report_modules_need_install
     fi
 
     if [[ "uninstall" == "$COMMAND" ]]; then
