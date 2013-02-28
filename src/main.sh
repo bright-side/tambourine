@@ -21,6 +21,8 @@ main() {
     main::_init_options $@
 
     if [[ "install" == "$COMMAND" ]]; then
+        echo "Preparing to install modules..."
+
         main::_extend_modules_by_deps
 
         for module in "${MODULES[@]}"; do
@@ -28,6 +30,10 @@ main() {
         done
 
         main::_exclude_installed_modules
+    fi
+
+    if [[ "uninstall" == "$COMMAND" ]]; then
+        echo "Preparing to uninstall modules..."
     fi
 
     for module in "${MODULES[@]}"; do
