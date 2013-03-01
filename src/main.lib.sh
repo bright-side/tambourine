@@ -227,6 +227,26 @@ main::_report_modules_need_install() {
     fi
 }
 
+main::_report_modules_need_reinstall() {
+    declare -a need_reinstall_modules
+
+    for module in "${MODULES[@]}"; do
+        if [[ "INSTALLED_WITH_OTHER_OPTIONS" == "${MODULES_STATE[$module]}" ]]; then
+            need_reinstall_modules=( "${need_reinstall_modules[@]}" "$module" )
+        fi
+    done
+
+    if [ "${#need_reinstall_modules[@]}" -gt 0 ]; then
+        echo "The following modules have been already installed, but with other options:"
+
+        for module in "${need_reinstall_modules[@]}"; do
+            echo " * $module"
+        done
+
+        confirm "Reinstall these modules with specified options" "Stopping installation..."
+    fi
+}
+
 main::_report_can_break_modules() {
     declare -a modules_can_break
 

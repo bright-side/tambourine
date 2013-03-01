@@ -32,6 +32,7 @@ main() {
         main::_exclude_installed_modules
 
         main::_report_modules_need_install
+        main::_report_modules_need_reinstall
     fi
 
     if [[ "uninstall" == "$COMMAND" ]]; then
