@@ -44,4 +44,8 @@ main() {
     for module in "${MODULES[@]}"; do
         core::module::_execute "$module" "$COMMAND"
     done
+
+    if [[ "check" == "$COMMAND" ]]; then
+        main::_report_modules_states
+    fi
 }; main $@

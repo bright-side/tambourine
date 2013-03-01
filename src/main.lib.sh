@@ -293,3 +293,20 @@ main::_report_can_break_modules() {
         confirm "Confirm uninstall" "Stopping uninstallation..."
     fi
 }
+
+
+main::_report_modules_states() {
+    for module in "${MODULES[@]}"; do
+        case "${MODULES_STATE[$module]}" in
+            "INSTALLED" )
+                echo "The module \"$module\" is installed."
+                ;;
+            "INSTALLED_WITH_OTHER_OPTIONS" )
+                echo "The module \"$module\" is installed, but with other options."
+                ;;
+            "NOT_INSTALLED" )
+                echo "The module \"$module\" is not installed."
+                ;;
+        esac
+    done
+}
