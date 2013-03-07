@@ -1,5 +1,5 @@
 main::_version() {
-    echo "0.0.2"
+    echo "0.0.3"
 }
 
 main::_build() {
