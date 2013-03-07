@@ -1,0 +1,70 @@
+#!/bin/bash
+
+printf "\033c"
+
+echo -n "throw "
+bats unit/lib/throw.bats
+echo ""
+
+echo -n "check_num_args "
+bats unit/lib/check_num_args.bats
+echo ""
+
+echo -n "check_dir "
+bats unit/lib/check_dir.bats
+echo ""
+
+echo -n "check_file "
+bats unit/lib/check_file.bats
+echo ""
+
+echo -n "main::_build "
+bats unit/main/_build.bats
+echo ""
+
+echo -n "main::_init_command "
+bats unit/main/_init_command.bats
+echo ""
+
+echo -n "main::_trim_modules "
+bats unit/main/_trim_modules.bats
+echo ""
+
+echo -n "main::_init_modules "
+bats unit/main/_init_modules.bats
+echo ""
+
+echo -n "main::_init_options_by_conf "
+bats unit/main/_init_options_by_conf.bats
+echo ""
+
+echo -n "main::_init_options_by_args "
+bats unit/main/_init_options_by_args.bats
+echo ""
+
+echo -n "main::_init_options "
+bats unit/main/_init_options.bats
+echo ""
+
+echo -n "main::_extend_modules_by_deps "
+bats unit/main/_extend_modules_by_deps.bats
+echo ""
+
+echo -n "main::_exclude_installed_modules "
+bats unit/main/_exclude_installed_modules.bats
+echo ""
+
+echo -n "main::_report_modules_need_install "
+bats unit/main/_report_modules_need_install.bats
+echo ""
+
+echo -n "main::_report_modules_need_reinstall "
+bats unit/main/_report_modules_need_reinstall.bats
+echo ""
+
+echo -n "main::_report_can_break_modules "
+bats unit/main/_report_can_break_modules.bats
+echo ""
+
+echo -n "main::_report_modules_states "
+bats unit/main/_report_modules_states.bats
