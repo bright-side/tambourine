@@ -1,0 +1,9 @@
+STANDARD_MODULES=(
+    empty_module
+    module_without_install
+    module_without_uninstall
+    module_without_check
+    module_without_deps
+    module_without_packs
+    module_without_opts
+)
