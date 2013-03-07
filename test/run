@@ -2,6 +2,11 @@
 
 printf "\033c"
 
+echo "##############################"
+echo "# Unit tests"
+echo "##############################"
+echo ""
+
 echo -n "throw "
 bats unit/lib/throw.bats
 echo ""
@@ -68,3 +73,24 @@ echo ""
 
 echo -n "main::_report_modules_states "
 bats unit/main/_report_modules_states.bats
+echo ""
+
+echo "##############################"
+echo "# Integration tests"
+echo "##############################"
+echo ""
+
+echo -n "core::module::_execute "
+bats integration/core/module/_execute.bats
+echo ""
+
+echo -n "core::module::_require_file "
+bats integration/core/module/_require_file.bats
+echo ""
+
+echo -n "core::module::check_completeness "
+bats integration/core/module/check_completeness.bats
+echo ""
+
+echo -n "main::_build "
+bats integration/main/_build.bats
