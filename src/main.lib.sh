@@ -235,7 +235,9 @@ main::_report_modules_need_reinstall() {
 
     for module in "${MODULES[@]}"; do
         if [[ "INSTALLED_WITH_OTHER_OPTIONS" == "${MODULES_STATE[$module]}" ]]; then
-            need_reinstall_modules=( "${need_reinstall_modules[@]}" "$module" )
+            if [[ ! ${need_reinstall_modules[@]} =~ $module ]]; then
+                need_reinstall_modules=( "${need_reinstall_modules[@]}" "$module" )
+            fi
         fi
     done
 
