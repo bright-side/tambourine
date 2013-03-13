@@ -86,3 +86,121 @@ core::module::check() {
 
     core::module::_execute "$1" "check"
 }
+
+
+core::module::perform_at_packs() {
+    check_num_args 1 $# $FUNCNAME
+
+    for pack in "${PACKS[@]}"; do
+        apt-get $1 $pack -y || {
+            echo "Error: failed to $1 the package \"$pack\"!"
+            exit 1
+        }
+    done
+}
+
+# Prepare a list of packages to remove for the specified module
+# Удаление пакетов, используемых другими модулями
+core::module::get_unused_packs() {
+    check_num_args 1 $# $FUNCNAME
+
+    core::module::require_packs "$1"
+
+    declare -a res_packs=("${PACKS[@]}")
+
+    for module in "${STANDARD_MODULES[@]}"; do
+        if [[ $1 != $module ]]; then
+
+            [[ ${MODULES[@]} =~ $module ]] && {
+                continue
+            }
+
+            core::module::check "$module"
+            if [[ $MODULES_STATE[$module] = "NOT_INSTALLED" ]]; then
+                continue
+            fi
+
+            core::module::require_packs "$module"
+
+            local i=0
+            while [[ $i -lt ${#PACKS[@]} ]]; do
+                local j=0
+                while [[ $j -lt ${#res_packs[@]} ]]; do
+                    if [[ ${res_packs[$j]} == ${PACKS[$i]} ]]; then
+                        res_packs=( ${res_packs[@]:0:$j} ${res_packs[@]:($j+1)} )
+                    fi
+                    j=$((j+1))
+                done
+                i=$((i+1))
+            done
+        fi
+    done
+
+    PACKS=(${res_packs[@]})
+}
+
+core::module::check_pack_status_by_apt() {
+    check_num_args 1 $# $FUNCNAME
+    local pack=$1
+    PACK_INSTALLED=true
+    local result=`aptitude search "^$pack$"`
+        if [[ $? -ne 0 ]]; then
+            PACK_INSTALLED=false
+            return
+        fi
+        local state=${result:0:1}
+        if [[ $state = 'c' || $state = 'p' ]]; then
+            PACK_INSTALLED=false
+            return
+        fi
+}
+
+core::module::check_pack_status_by_dpkg() {
+    check_num_args 1 $# $FUNCNAME
+    local pack=$1
+    PACK_INSTALLED=true
+    dpkg -s $pack >& /dev/null || {
+        PACK_INSTALLED=false
+        return
+    }
+    local info=`dpkg -s $pack`
+    local pos=`awk -v a="$info" -v b="not-installed" 'BEGIN{print index(a,b)}'`
+    if [[ $pos -ne 0 ]]; then
+        PACK_INSTALLED=false
+    fi
+}
+
+core::module::install_packs() {
+    check_num_args 1 $# $FUNCNAME
+    local module=$1
+
+    core::module::require_packs $module
+    core::module::perform_at_packs "install"
+}
+
+core::module::purge_packs() {
+    check_num_args 1 $# $FUNCNAME
+    local module=$1
+
+    core::module::require_packs $module
+    core::module::get_unused_packs $module
+    core::module::perform_at_packs "purge"
+    apt-get autoclean -y
+    apt-get autoremove -y
+}
+
+core::module::check_packs() {
+    check_num_args 1 $# $FUNCNAME
+    local module=$1
+
+    core::module::require_packs $module
+    PACKS_INSTALLED=true
+
+    for pack in "${PACKS[@]}"; do
+        core::module::check_pack_status_by_apt $pack
+        if [[ $PACK_INSTALLED = false ]]; then
+            PACKS_INSTALLED=false
+            return
+        fi
+    done
+}
