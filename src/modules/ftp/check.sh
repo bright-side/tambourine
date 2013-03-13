@@ -35,7 +35,7 @@ __namespace__() {
                 MODULES_STATE['ftp']='INSTALLED_WITH_OTHER_OPTIONS'
                 return
             fi
-        } || {ftp
+        } || {
             if [[ ${FTP_OPTS[$BASH_REMATCH]} != no ]]; then
                 MODULES_STATE['ftp']='INSTALLED_WITH_OTHER_OPTIONS'
                 return
