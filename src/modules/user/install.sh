@@ -12,7 +12,7 @@ __namespace__() {
     [[ ${MODIFY[@]} =~ user ]] || {
         core::module::install_packs 'user'
 
-        check_pack_status_by_apt 'whois'
+        core::module::check_pack_status_by_apt 'whois'
         local purge_whois=false
         if [[ $PACK_INSTALLED = false ]]; then
             apt-get install -y whois > /dev/null
@@ -30,7 +30,6 @@ __namespace__() {
 
         grep "^$login:" $conf_file >/dev/null && {
             echo "User '$login' already exists!"
-            exit 1
         } || {
             local salt=`tr -dc 0-9 < /dev/urandom | head -c 2 | xargs`
             local crypted_pass=`mkpasswd $password $salt`
@@ -49,6 +48,7 @@ __namespace__() {
 
     # Добавить пользователя в группу 'sudo' (или удалить)
     [[ ${!USER_OPTS[@]} =~ s|(sudoer) ]] && {
+        core::module::check_pack_status_by_apt 'sudo'
         if [[ ${USER_OPTS[$BASH_REMATCH]} != no ]]; then
             usermod -a -G sudo $login || {
                 echo "Failed to add a user to the 'sudo' group!"
