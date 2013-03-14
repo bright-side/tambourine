@@ -37,4 +37,15 @@ __namespace__() {
         }
     }
 
+    # Файлы, необходимые для авторизации по публичным ключам
+    if [[ ${!SSH_OPTS[@]} =~ a|(auth-keys-file) ]]; then
+        local path=${SSH_OPTS[$BASH_REMATCH]}
+        if [[ $path != 'no' ]]; then
+            if [[ ! -f $path ]]; then
+                MODULES_STATE['ssh']='INSTALLED_WITH_OTHER_OPTIONS'
+                return
+            fi
+        fi
+    fi
+
 }; __namespace__

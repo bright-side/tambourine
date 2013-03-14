@@ -25,6 +25,16 @@ __namespace__() {
         fi
     fi
 
+    # Создание файлов, необходимых для авторизации по публичным ключам
+    if [[ ${!SSH_OPTS[@]} =~ a|(auth-keys-file) ]]; then
+        local path=${SSH_OPTS[$BASH_REMATCH]}
+        if [[ $path != 'no' ]]; then
+            local dir=`dirname $path`
+            mkdir -p $dir
+            :> $path
+        fi
+    fi
+
     /etc/init.d/ssh restart
 
 }; __namespace__

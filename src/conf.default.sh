@@ -8,6 +8,7 @@ USER_OPTS['sudoer']=yes
 
 SSH_OPTS['port']=12345
 SSH_OPTS['forbid-root']=yes
+SSH_OPTS['auth-keys-file']='/home/testuser/.ssh/authorized_keys' # 'path' | 'no'
 
 FTP_OPTS['disable-anonymous']=yes
 FTP_OPTS['enable-local']=yes

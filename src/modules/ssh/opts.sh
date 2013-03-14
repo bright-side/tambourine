@@ -1,4 +1,4 @@
 #!/bin/bash
 
-SHORT_OPTS='p:f'
-LONG_OPTS='port:,forbid-root'
+SHORT_OPTS='p:f:a:'
+LONG_OPTS='port:,forbid-root:,auth-keys-file:'
