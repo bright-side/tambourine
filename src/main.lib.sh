@@ -67,9 +67,9 @@ main::_trim_modules() {
 main::_init_modules() {
     for arg; do
         if [[ "${STANDARD_MODULES[@]}" =~ "$arg" ]]; then
-            #if [[ ! "${MODULES[@]}" =~ "$arg" ]]; then
+            if [[ ! "${MODULES[@]}" =~ "$arg" ]]; then
                 MODULES[${#MODULES[@]}]=$arg
-            #fi
+            fi
         fi
     done
 
@@ -77,7 +77,7 @@ main::_init_modules() {
         throw "You didn't specify modules to be ${COMMAND}ed or these modules are unknown to the Tambourine!"
     fi
 
-    main::_trim_modules
+    #main::_trim_modules
 }
 
 main::_init_options_by_conf() {
