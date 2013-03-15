@@ -72,7 +72,7 @@ main::_init_modules() {
     done
 
     if [ -z "$MODULES" ]; then
-        throw "You didn't specify modules to be $COMMANDed or these modules are unknown to the Tambourine!"
+        throw "You didn't specify modules to be ${COMMAND}ed or these modules are unknown to the Tambourine!"
     fi
 
     main::_trim_modules
