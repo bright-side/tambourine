@@ -20,3 +20,5 @@ NGINX_OPTS['auth']=yes
 NGINX_OPTS['gzip-static']=yes
 
 RUBY_OPTS['user']=testuser
+
+BACKUP_OPTS['user']=testuser

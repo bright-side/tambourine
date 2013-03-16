@@ -1,6 +1,7 @@
 #!/bin/bash
 
 STANDARD_MODULES=(
+	backup
 	ftp
     mongroup
     mysql
