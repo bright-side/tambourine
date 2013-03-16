@@ -19,5 +19,6 @@ __namespace__() {
     }
 
     su $user -l -c "gem install backup"
+    su $user -l -c "backup dependencies --install dropbox-sdk"
 
 }; __namespace__
