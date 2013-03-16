@@ -85,6 +85,10 @@ core::module::check() {
     check_num_args 1 $# $FUNCNAME
 
     core::module::_execute "$1" "check"
+
+    if [[ ${MODULES_STATE[$1]} = "NOT_INSTALLED" ]]; then
+        return 1
+    fi
 }
 
 
