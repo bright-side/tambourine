@@ -6,6 +6,7 @@ STANDARD_MODULES=(
     mysql
     nginx
     node
+    ruby
     ssh
     sudo
     user
