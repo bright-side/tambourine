@@ -23,6 +23,10 @@ echo -n "check_file "
 bats unit/lib/check_file.bats
 echo ""
 
+echo -n "get_module_opts_var "
+bats unit/lib/get_module_opts_var.bats
+echo ""
+
 echo -n "main::_build "
 bats unit/main/_build.bats
 echo ""

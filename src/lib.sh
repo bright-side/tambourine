@@ -52,7 +52,6 @@ confirm() {
     }
 }
 
-# TODO: переместить в более подходящее место
 get_ip() {
     IP=`ip -4 a l dev eth1  | grep inet | awk '{ print $2 }'`
     local pos=`expr index $IP /`
@@ -61,20 +60,7 @@ get_ip() {
     }
 }
 
-# Copies elements from OPTIONS to ${MODULE}_OPTS
-# Uses: OPTIONS, MODULES
-assign_module_opts() {
-    get_module_opts_var ${MODULES[0]}
-    for opt in "${!OPTIONS[@]}"; do
-        if [[ $opt = 'conf' ]]; then
-            continue
-        fi
-        eval "$MODULE_OPTS_VAR[$opt]="${OPTIONS[$opt]}""
-    done
-}
-
 # Имя массива, хранящего опции модуля
-# $1 - module
 get_module_opts_var() {
     check_num_args 1 $# $FUNCNAME
     local module=$1
