@@ -38,7 +38,7 @@ require() {
     . "$1"
 }
 
-function confirm() {
+confirm() {
     check_num_args 1 $# $FUNCNAME
 
     read -p "$1 (Y/[n])? " -r
