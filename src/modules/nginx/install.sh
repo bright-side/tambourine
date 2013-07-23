@@ -23,7 +23,11 @@ __namespace__() {
                 wget --no-check-certificate https://github.com/samizdatco/nginx-http-auth-digest/tarball/master -O master.tar.gz
                 tar -xzf master.tar.gz
                 rm master.tar.gz
-                options="$options --add-module=../samizdatco-nginx-http-auth-digest-*"  
+                options="$options --add-module=../samizdatco-nginx-http-auth-digest-*"
+
+                # При компиляции вылетает ошибка из-за неиспользуемой переменной, т.к. установлен флаг -Werror
+                # Cratch: убрать флаг
+                sed -e "s/^CFLAGS=\"\$CFLAGS -Werror\"\$/# CFLAGS=\"\$CFLAGS -Werror\"/" -i nginx-*/auto/cc/gcc
             fi
         }
 
