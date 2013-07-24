@@ -13,8 +13,13 @@ __namespace__() {
 
         tar -xzf node-latest.tar.gz
         rm node-latest.tar.gz
+
+        # Извлекаем версию из имени папки
+        local dirname=`find . -maxdepth 1 -name 'node-v*' -print`
+        local version=${dirname:8}
+
         cd node-v*
-        ./configure && make && checkinstall --install=yes --pkgname=nodejs --default
+        ./configure && make && checkinstall --install=yes --pkgname=nodejs --pkgversion=$version --default
         
         cd $MAIN_DIR
         rm -rf /tmp/node-install
