@@ -1,3 +1,3 @@
 #!/bin/bash
 
-PACKS=()
+PACKS=( libxslt-dev libxml2-dev )
