@@ -3,6 +3,7 @@
 STANDARD_MODULES=(
 	backup
 	ftp
+	mongodb
     mongroup
     mysql
     nginx
