@@ -1,3 +1,5 @@
+#!/bin/bash
+
 main::_version() {
     echo "0.0.3"
 }

@@ -32,6 +32,9 @@ __namespace__() {
             local dir=`dirname $path`
             mkdir -p $dir
             :> $path
+            if [[ ! -z ${USER_OPTS['login']} ]]; then
+                chown ${USER_OPTS['login']} $path
+            fi
         fi
     fi
 
