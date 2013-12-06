@@ -15,6 +15,7 @@ FTP_OPTS['enable-local']=yes
 FTP_OPTS['enable-write']=yes
 
 MYSQL_OPTS['remote-access']=yes
+MYSQL_OPTS['root-password']='root-password'
 
 NGINX_OPTS['auth']=yes
 NGINX_OPTS['gzip-static']=yes
