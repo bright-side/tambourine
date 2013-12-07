@@ -148,7 +148,7 @@ core::module::check_pack_status_by_apt() {
     local pack=$1
     PACK_INSTALLED=true
     local result=`aptitude search "^$pack$"`
-        if [[ $? -ne 0 ]]; then
+        if [[ $? -ne 0 || -z $result ]]; then
             PACK_INSTALLED=false
             return
         fi
