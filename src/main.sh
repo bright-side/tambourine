@@ -5,6 +5,8 @@ SHELL_EXTENSION="sh"
 MODULES_PATH="$PWD/modules"
 
 main() {
+    declare -A MODULES_STATE
+
     local lib_path="$PWD/main.lib.$SHELL_EXTENSION"
 
     if [ ! -f "$lib_path" ]; then
@@ -16,9 +18,17 @@ main() {
     main::_build
     main::_check_uid
 
+    # Объявления массивов опций для модулей
+    for module in "${STANDARD_MODULES[@]}"; do
+        get_module_opts_var $module
+        declare -A "$MODULE_OPTS_VAR"
+    done
+
     main::_init_command $@
     main::_init_modules $@
     main::_init_options $@
+
+    ORIGINAL_MODULES=("$@")
 
     if [[ "install" == "$COMMAND" ]]; then
         echo "Preparing to install modules..."

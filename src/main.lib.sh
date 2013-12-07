@@ -1,3 +1,5 @@
+#!/bin/bash
+
 main::_version() {
     echo "0.0.3"
 }
@@ -67,15 +69,17 @@ main::_trim_modules() {
 main::_init_modules() {
     for arg; do
         if [[ "${STANDARD_MODULES[@]}" =~ "$arg" ]]; then
-            MODULES[${#MODULES[@]}]=$arg
+            if [[ ! "${MODULES[@]}" =~ "$arg" ]]; then
+                MODULES[${#MODULES[@]}]=$arg
+            fi
         fi
     done
 
     if [ -z "$MODULES" ]; then
-        throw "You didn't specify modules to be $COMMANDed or these modules are unknown to the Tambourine!"
+        throw "You didn't specify modules to be ${COMMAND}ed or these modules are unknown to the Tambourine!"
     fi
 
-    main::_trim_modules
+    #main::_trim_modules
 }
 
 main::_init_options_by_conf() {
@@ -96,12 +100,13 @@ main::_init_options_by_conf() {
     if [ -z "$conf_path" ]; then
         throw "You didn't specify a path to config file!"
     else
+        # BUG: если путь к конфигу неправильный, выводит "The"
         require "$conf_path" "The specified config file \"$conf_path\" does not exist!"
     fi
 }
 
 main::_init_options_by_args() {
-    declare -a options
+    declare -A options
     core::module::require_opts "${MODULES[0]}"
 
     local args=`getopt -o "$SHORT_OPTS" --long "$LONG_OPTS" -- "$@"`
@@ -211,7 +216,7 @@ main::_report_modules_need_install() {
     declare -a need_install_modules
 
     for module in "${MODULES[@]}"; do
-        if [[ ! "${INITED_MODULES[@]}" =~ "$module" ]] && [[ "NOT_INSTALLED" == "${MODULES_STATE[$module]}" ]]; then
+        if [[ ! "${ORIGINAL_MODULES[@]}" =~ "$module" ]] && [[ "NOT_INSTALLED" == "${MODULES_STATE[$module]}" ]]; then
             need_install_modules=( "${need_install_modules[@]}" "$module" )
         fi
     done
@@ -232,7 +237,9 @@ main::_report_modules_need_reinstall() {
 
     for module in "${MODULES[@]}"; do
         if [[ "INSTALLED_WITH_OTHER_OPTIONS" == "${MODULES_STATE[$module]}" ]]; then
-            need_reinstall_modules=( "${need_reinstall_modules[@]}" "$module" )
+            if [[ ! ${need_reinstall_modules[@]} =~ $module ]]; then
+                need_reinstall_modules=( "${need_reinstall_modules[@]}" "$module" )
+            fi
         fi
     done
 
