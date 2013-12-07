@@ -53,15 +53,11 @@ confirm() {
 }
 
 get_ip() {
-    IP=`ip -4 a l dev eth1  | grep inet | awk '{ print $2 }'`
+    IP=`ifconfig  | grep 'inet addr:'| grep -v '127.0.0.1' | grep -v 'inet addr:10.*' | cut -d: -f2 | awk '{ print $1}'`
     if [[ -z $IP ]]; then
         IP='127.0.0.1'
         return
     fi
-    local pos=`expr index $IP /`
-    [[ $pos -ne 0 ]] && {
-        IP=${IP:0:(($pos-1))}
-    }
 }
 
 # Имя массива, хранящего опции модуля
