@@ -61,4 +61,7 @@ __namespace__() {
         /etc/init.d/mysql restart
     }
 
+    # Во избежание ошибки "Can't get hostname for your address"
+    sed -e "s/\[mysqld\]/&\nskip-name-resolve/ " -i $conf_file
+
 }; __namespace__
